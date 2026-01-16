@@ -20,7 +20,7 @@ class EmployeeModel(Base):
     is_active = Column(Boolean, default=True)
 
     assignments = relationship(
-        "AssignedProject",
+        "AssignedProjectModel",
         back_populates="employee",
         cascade="all, delete"
     )

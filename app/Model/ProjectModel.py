@@ -17,7 +17,7 @@ class ProjectModel(Base):
     end_date = Column(DateTime, nullable=True)
 
     assignments = relationship(
-        "AssignedProject",
+        "AssignedProjectModel",
         back_populates="project",
         cascade="all, delete"
     )
