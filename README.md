@@ -151,9 +151,6 @@ projectmanagement/
 │   │   └── AssignedProjectModel.py # Assignment model
 │   └── Routes/
 │       └── AuthRoutes.py   # Authentication endpoints
-├── logs/                   # Log files
-│   ├── app.log
-│   └── errors.log
 └── projectmanagement.db    # SQLite database file
 ```
 
@@ -378,13 +375,13 @@ CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 ## Logging
 
-The application includes comprehensive logging:
+The application includes comprehensive console logging:
 
-- **Console Logging**: INFO level and above
-- **File Logging**: All levels to `logs/app.log`
-- **Error Logging**: WARNING+ to `logs/errors.log` (rotating, 10MB max)
+- **Console Logging**: All log levels displayed in terminal
+- **Log Levels**: DEBUG, INFO, WARNING, ERROR, CRITICAL
+- **Format**: `timestamp - logger - level - message`
 
-Log format: `timestamp - logger - level - message`
+To change log level, modify the console handler level in `app/Core/Logger.py`.
 
 ## Security Features
 
