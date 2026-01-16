@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 
 from app.DataBase import get_db
 from app.Core.Config import config as settings
+from app.Core.Logger import logger
 
 from app.Model.EmployeeModel import EmployeeModel
 
@@ -18,11 +19,13 @@ def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: Session = Depends(get_db)
 ):
+    logger.info(f"Login attempt for user: {form_data.username}")
     user = db.query(EmployeeModel).filter(
         EmployeeModel.email == form_data.username
     ).first()
 
     if not user or not verify_password(form_data.password, user.hashed_password):
+        logger.warning(f"Failed login attempt for user: {form_data.username}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials"
@@ -30,7 +33,7 @@ def login(
 
     access_token = create_access_token({"sub": user.emp_id})
     refresh_token = create_refresh_token({"sub": user.emp_id})
-
+    logger.info(f"Successful login for user: {form_data.username}")
     return {
         "access_token": access_token,
         "refresh_token": refresh_token,

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.DataBase import engine, Base
 from app.Routes.AuthRoutes import router as auth_router
+from app.Core.Logger import logger
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
@@ -20,6 +21,9 @@ app.add_middleware(
 # Include routers
 app.include_router(auth_router)
 
+logger.info("FastAPI app started")
+
 @app.get("/")
 async def read():
+    logger.debug("Root endpoint accessed")
     return {"message": "Hello World"}
