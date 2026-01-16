@@ -1,4 +1,4 @@
-from app.Core.Config import settings
+from app.Core.Config import config as settings
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 

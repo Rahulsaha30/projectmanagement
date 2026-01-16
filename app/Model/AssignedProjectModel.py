@@ -14,8 +14,8 @@ class AssignedProjectModel(Base):
     assigned_at = Column(DateTime, default=datetime.utcnow)
     allotted_hours = Column(Integer, nullable=False)
 
-    employee = relationship("Employee", back_populates="assignments")
-    project = relationship("Project", back_populates="assignments")
+    employee = relationship("EmployeeModel", back_populates="assignments")
+    project = relationship("ProjectModel", back_populates="assignments")
 
     __table_args__ = (
         UniqueConstraint("emp_id", "project_id", name="unique_employee_project"),

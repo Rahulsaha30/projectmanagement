@@ -2,7 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.DataBase import engine, Base
 from app.Routes.AuthRoutes import router as auth_router
-from app.Core.Logger import logger
+from app.Core.Logger import setup_logging
+
+# Setup logging
+logger = setup_logging()
 
 # Create database tables
 Base.metadata.create_all(bind=engine)

@@ -7,9 +7,11 @@ from sqlalchemy.orm import Session
 
 from app.DataBase import get_db
 from app.Core.Config import config as settings
-from app.Core.Logger import logger
+from app.Core.Logger import setup_logging
 
 from app.Model.EmployeeModel import EmployeeModel
+
+logger = setup_logging()
 
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
@@ -57,7 +59,7 @@ def refresh_access_token(
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="User not found")
 
-    new_access_token = craete_access_token({"sub": user.emp_id})
+    new_access_token = create_access_token({"sub": user.emp_id})
 
     return {"access_token": new_access_token, "token_type": "bearer"}
 
