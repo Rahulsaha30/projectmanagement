@@ -1,11 +1,11 @@
-from pydantic import BaseSettings
+from pydantic_settings import BaseSettings
 
 class Config(BaseSettings):
     DataBase_URL: str
-    Secret_Key: str
-    Algorithm: str
-    Access_Token_Expire_Min: int
-    Refresh_Token_Expire_Days: int
+    SECRET_KEY: str
+    ALGORITHM: str
+    ACCESS_TOKEN_EXPIRY_MIN: int
+    REFRESH_TOKEN_EXPIRY_DAYS: int
 
     class Config:
         env_file = ".env"

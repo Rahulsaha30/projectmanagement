@@ -20,9 +20,9 @@ def verify_password(plain_password,strhashed_password:str):
 
 
 # --- ACCESS TOKEN ---
-def craete_access_token(data: dict):
+def create_access_token(data: dict):
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRY)
+    expire = datetime.utcnow() + timedelta(minutes=settings.ACCESS_TOKEN_EXPIRY_MIN)
     to_encode.update({"exp": expire})
     encoded = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
     return encoded

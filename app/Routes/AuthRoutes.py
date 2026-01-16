@@ -1,6 +1,6 @@
 from fastapi.security import OAuth2PasswordRequestForm
 from app.Core.Security import verify_password
-from app.Core.Security import craete_access_token, create_refresh_token, verify_refresh_token
+from app.Core.Security import create_access_token, create_refresh_token, verify_refresh_token
 from fastapi import APIRouter, Depends, HTTPException, status
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
@@ -28,7 +28,7 @@ def login(
             detail="Invalid credentials"
         )
 
-    access_token = craete_access_token({"sub": user.emp_id})
+    access_token = create_access_token({"sub": user.emp_id})
     refresh_token = create_refresh_token({"sub": user.emp_id})
 
     return {
