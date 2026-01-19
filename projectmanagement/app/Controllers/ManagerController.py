@@ -5,11 +5,17 @@ from app.Model.EmployeeModel import EmployeeModel
 from app.Model.AssignedProjectModel import AssignedProjectModel
 from app.Model.ProjectModel import ProjectModel
 from app.Model.Role import RoleEnum
-from pydantic import BaseModel
+from app.View.EmployeeSchemas import (
+    EmployeeCreate, EmployeeUpdate, EmployeeResponse,
+)
+from app.View.AssignmentSchemas import (
+    AssignmentCreate, AssignmentUpdate, AssignmentResponse
+)
 from datetime import datetime
 
-def check_manager_or_admin(user: EmployeeModel):
-    if user.role not in [RoleEnum.manager, RoleEnum.admin]:
+# def check_manager_or_admin(user: EmployeeModel):
+def check_manager_or_admin(user):
+    if user['role'] not in [RoleEnum.manager, RoleEnum.admin]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"
@@ -17,7 +23,16 @@ def check_manager_or_admin(user: EmployeeModel):
 
 # Employee functions
 def create_employee(db: Session, employee: EmployeeCreate, current_user: EmployeeModel):
+    print("\n\n USER:\n", current_user, "\n\n")
+    print("\nCURRENT USRER ROLE\n", current_user['role'], "\n\n")
     check_manager_or_admin(current_user)
+
+    # existing_curr_man = db.query(EmployeeModel).filter(
+    #     EmployeeModel.role == RoleEnum.manager,
+    #     EmployeeModel.email == current_user.email
+    # ).first()
+    # if not existing_curr_man or not existing_curr_man.is_active:
+    #     raise HTTPException(status_code=403, detail="Current user is not active or not a manager")
     
     # Check if email exists
     existing = db.query(EmployeeModel).filter(EmployeeModel.email == employee.email).first()

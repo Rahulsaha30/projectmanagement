@@ -30,7 +30,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(auth_router)
-# app.include_router(manager_router)
+app.include_router(manager_router)
 
 logger.info("FastAPI app started")
 

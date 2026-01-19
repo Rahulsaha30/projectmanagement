@@ -5,6 +5,7 @@ from app.Model.Role import RoleEnum
 
 class EmployeeModel(Base):
     __tablename__="employees"
+    
     emp_id = Column(Integer, primary_key=True, index=True)
     emp_name = Column(String, nullable=False)
 
