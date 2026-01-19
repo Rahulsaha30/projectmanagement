@@ -217,7 +217,13 @@ function App() {
               </div>
               <div className="form-group">
                 <label>Role:</label>
-                <select value={role} onChange={(e) => setRole(e.target.value)} style={{width: '100%', padding: '12px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.2)', color: 'white', border: 'none', outline: 'none'}}>
+                <select 
+                  value={role} 
+                  onChange={(e) => setRole(e.target.value)} 
+                  title="Select your role"
+                  aria-label="User role selection"
+                  style={{width: '100%', padding: '12px', borderRadius: '10px', background: 'rgba(255, 255, 255, 0.2)', color: 'white', border: 'none', outline: 'none'}}
+                >
                   <option value="admin" style={{background: '#667eea', color: 'white'}}>Admin</option>
                   <option value="manager" style={{background: '#667eea', color: 'white'}}>Manager</option>
                   <option value="employee" style={{background: '#667eea', color: 'white'}}>Employee</option>

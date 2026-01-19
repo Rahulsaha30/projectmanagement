@@ -5,6 +5,12 @@ from app.Routes.AuthRoutes import router as auth_router
 from app.Routes.ManagerRoutes import router as manager_router
 from app.Core.Logger import setup_logging
 
+# Import all models to ensure they are registered with SQLAlchemy
+from app.Model.EmployeeModel import EmployeeModel
+from app.Model.ProjectModel import ProjectModel
+from app.Model.AssignedProjectModel import AssignedProjectModel
+from app.Model.Role import RoleEnum
+
 # Setup logging
 logger = setup_logging()
 
