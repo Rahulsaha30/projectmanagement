@@ -8,7 +8,8 @@ from sqlalchemy.orm import Session
 from app.DataBase import get_db
 from app.Model.EmployeeModel import EmployeeModel
 import bcrypt
-import re
+from app.Utils.JwtPayload import JwtPayload
+# import re
 
 def hash_password(password: str) -> str:
     return bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -54,47 +55,6 @@ def verify_refresh_token(token: str):
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-# def get_current_user(
-#     token: str = Depends(oauth2_scheme),
-#     db: Session = Depends(get_db)
-# ):
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"Authorization": "Bearer"},
-#     )
-
-#     try:
-#         print("\n\n DECODING TOKEN RECEIVED FROM FRONTEND...\n", token, "\n\n")
-
-#         payload = jwt.decode(
-#             token,
-#             settings.SECRET_KEY,
-#             algorithms=[settings.ALGORITHM]
-#         )
-
-#         print("PAYLOAD:\n", payload, "\n\n")
-        
-#         emp_id: str = payload.get("sub")
-#         if emp_id is None:
-#             print("ERROR: emp_id is None in payload")
-#             raise credentials_exception
-
-#     except JWTError as e:
-#         print(f"JWT ERROR: {str(e)}")
-#         raise credentials_exception
-#     except Exception as e:
-#         print(f"UNEXPECTED ERROR: {str(e)}")
-#         raise credentials_exception
-
-#     user = db.query(EmployeeModel).filter(EmployeeModel.emp_id == emp_id).first()
-
-#     if user is None or not user.is_active:
-#         print(f"USER LOOKUP FAILED: emp_id={emp_id}, user={user}, is_active={user.is_active if user else 'N/A'}")
-#         raise credentials_exception
-
-#     return user
-
 def get_current_user(
     token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
@@ -135,7 +95,8 @@ def get_current_user(
     # if user is None or not user.is_active:
     #     raise credentials_exception
 
-    return payload
+    # return payload
+    return JwtPayload(**payload) 
 
 
 

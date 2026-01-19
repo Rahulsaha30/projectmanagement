@@ -15,7 +15,7 @@ from datetime import datetime
 
 # def check_manager_or_admin(user: EmployeeModel):
 def check_manager_or_admin(user):
-    if user['role'] not in [RoleEnum.manager, RoleEnum.admin]:
+    if user.role not in [RoleEnum.manager, RoleEnum.admin]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"
@@ -24,7 +24,9 @@ def check_manager_or_admin(user):
 # Employee functions
 def create_employee(db: Session, employee: EmployeeCreate, current_user: EmployeeModel):
     print("\n\n USER:\n", current_user, "\n\n")
-    print("\nCURRENT USRER ROLE\n", current_user['role'], "\n\n")
+    # print("\nCURRENT USRER ROLE\n", current_user['role'], "\n\n")
+    print("\nCURRENT USRER ROLE\n", current_user.role, "\n\n")
+
     check_manager_or_admin(current_user)
 
     # existing_curr_man = db.query(EmployeeModel).filter(
