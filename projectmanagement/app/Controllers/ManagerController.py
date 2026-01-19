@@ -8,54 +8,6 @@ from app.Model.Role import RoleEnum
 from pydantic import BaseModel
 from datetime import datetime
 
-# Pydantic models
-class EmployeeCreate(BaseModel):
-    emp_name: str
-    email: str
-    password: str
-    role: RoleEnum
-    billable_work_hours: Optional[int] = 0
-    skills: Optional[str] = None
-    experience: Optional[int] = None
-    dept: Optional[str] = None
-
-class EmployeeUpdate(BaseModel):
-    emp_name: Optional[str] = None
-    email: Optional[str] = None
-    role: Optional[RoleEnum] = None
-    billable_work_hours: Optional[int] = None
-    skills: Optional[str] = None
-    experience: Optional[int] = None
-    dept: Optional[str] = None
-
-class EmployeeResponse(BaseModel):
-    emp_id: int
-    emp_name: str
-    email: str
-    role: str
-    billable_work_hours: int
-    skills: Optional[str]
-    experience: Optional[int]
-    dept: Optional[str]
-    is_active: bool
-
-class AssignmentCreate(BaseModel):
-    emp_id: int
-    project_id: int
-    allotted_hours: int
-
-class AssignmentUpdate(BaseModel):
-    allotted_hours: Optional[int] = None
-
-class AssignmentResponse(BaseModel):
-    assign_id: int
-    emp_id: int
-    project_id: int
-    assigned_at: datetime
-    allotted_hours: int
-    emp_name: str
-    project_name: str
-
 def check_manager_or_admin(user: EmployeeModel):
     if user.role not in [RoleEnum.manager, RoleEnum.admin]:
         raise HTTPException(
