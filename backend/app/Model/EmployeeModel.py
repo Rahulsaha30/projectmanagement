@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String ,Enum, Boolean
 from sqlalchemy.orm import relationship
-from app.DataBase import Base
-from app.Model.Role import RoleEnum
+from backend.app.DataBase import Base
+from backend.app.Model.Role import RoleEnum
 
 class EmployeeModel(Base):
     __tablename__="employees"

@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
 # from datetime import datetime
-from app.Model.Role import RoleEnum
+from backend.app.Model.Role import RoleEnum
 
 class EmployeeResponse(BaseModel):
     emp_id: int

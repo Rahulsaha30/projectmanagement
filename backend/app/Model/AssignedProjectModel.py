@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from app.DataBase import Base
+from backend.app.DataBase import Base
 
 class AssignedProjectModel(Base):
     __tablename__ = "assigned_projects"

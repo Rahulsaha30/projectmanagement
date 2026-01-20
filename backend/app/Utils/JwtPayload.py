@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.Model.Role import RoleEnum
+from backend.app.Model.Role import RoleEnum
 from pydantic import EmailStr
  
 class JwtPayload(BaseModel):
