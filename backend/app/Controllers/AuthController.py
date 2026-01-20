@@ -113,8 +113,8 @@ def loginUser(
             detail="Invalid credentials"
         )
 
-    access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours })
-    refresh_token = create_refresh_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours })
+    access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours, "dept": user.dept })
+    refresh_token = create_refresh_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours, "dept": user.dept })
     print("\n\n GENERATED TOKENS:\n", access_token, "\n", refresh_token, "\n\n")
 
     logger.info(f"Successful login for user: {form_data.username}")
@@ -177,5 +177,5 @@ def refreshAccessToken(
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="User not found")
 
-    new_access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours })
+    new_access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours, "dept": user.dept })
     return {"access_token": new_access_token, "token_type": "bearer"}

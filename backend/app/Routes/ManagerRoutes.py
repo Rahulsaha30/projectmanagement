@@ -4,10 +4,8 @@ from typing import List, Optional
 from backend.app.DataBase import get_db
 from backend.app.Core.Security import get_current_user
 from backend.app.Controllers.ManagerController import (
-    create_employee, list_employees, get_employee, update_employee, deactivate_employee,
-    create_assignment, list_assignments, update_assignment, delete_assignment,
-    EmployeeCreate, EmployeeUpdate, EmployeeResponse,
-    AssignmentCreate, AssignmentUpdate, AssignmentResponse
+    create_employee, list_employees, get_employee, update_employee, toggle_employee_status,
+    EmployeeCreate, EmployeeUpdate, EmployeeResponse
 )
 from backend.app.Model.EmployeeModel import EmployeeModel
 
@@ -24,12 +22,10 @@ def add_employee(
 
 @router.get("/employees", response_model=List[EmployeeResponse])
 def get_employees(
-    dept: Optional[str] = Query(None),
-    role: Optional[str] = Query(None),
     db: Session = Depends(get_db),
     current_user: EmployeeModel = Depends(get_current_user)
 ):
-    return list_employees(db, dept, role, current_user)
+    return list_employees(db, None, None, current_user)
 
 @router.get("/employees/{emp_id}", response_model=EmployeeResponse)
 def get_employee_info(
@@ -48,45 +44,10 @@ def update_employee_info(
 ):
     return update_employee(db, emp_id, update, current_user)
 
-@router.delete("/employees/{emp_id}")
-def deactivate_employee_account(
-    emp_id: int,
-    db: Session = Depends(get_db),
-    current_user: EmployeeModel = Depends(get_current_user)
-):
-    return deactivate_employee(db, emp_id, current_user)
-
-# Assignment endpoints
-@router.post("/assignments", response_model=AssignmentResponse)
-def create_assignment_endpoint(
-    assignment: AssignmentCreate,
-    db: Session = Depends(get_db),
-    current_user: EmployeeModel = Depends(get_current_user)
-):
-    return create_assignment(db, assignment, current_user)
-
-@router.get("/assignments", response_model=List[AssignmentResponse])
-def list_assignments_endpoint(
-    emp_id: Optional[int] = Query(None),
-    project_id: Optional[int] = Query(None),
-    db: Session = Depends(get_db),
-    current_user: EmployeeModel = Depends(get_current_user)
-):
-    return list_assignments(db, emp_id, project_id, current_user)
-
-@router.put("/assignments/{assign_id}", response_model=AssignmentResponse)
-def update_assignment_endpoint(
-    assign_id: int,
-    update: AssignmentUpdate,
-    db: Session = Depends(get_db),
-    current_user: EmployeeModel = Depends(get_current_user)
-):
-    return update_assignment(db, assign_id, update, current_user)
-
-@router.delete("/assignments/{assign_id}")
-def delete_assignment_endpoint(
-    assign_id: int,
-    db: Session = Depends(get_db),
-    current_user: EmployeeModel = Depends(get_current_user)
-):
-    return delete_assignment(db, assign_id, current_user)
+# @router.patch("/employees/{emp_id}/toggle-status")
+# def toggle_employee_status_endpoint(
+#     emp_id: int,
+#     db: Session = Depends(get_db),
+#     current_user: EmployeeModel = Depends(get_current_user)
+# ):
+#     return toggle_employee_status(db, emp_id, current_user)
