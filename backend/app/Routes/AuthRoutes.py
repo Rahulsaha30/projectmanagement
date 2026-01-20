@@ -11,10 +11,10 @@
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from app.DataBase import get_db
-from app.Core.Logger import setup_logging
-from app.View.AuthSchemas import SignupRequest, ForgotPasswordRequest
-from projectmanagement.app.Controllers.AuthController import loginUser, signupUser, forgetPasswordUser, refreshAccessToken
+from backend.app.DataBase import get_db
+from backend.app.Core.Logger import setup_logging
+from backend.app.View.AuthSchemas import SignupRequest, ForgotPasswordRequest
+from backend.app.Controllers.AuthController import loginUser, signupUser, forgetPasswordUser, refreshAccessToken
 
 logger = setup_logging()
 

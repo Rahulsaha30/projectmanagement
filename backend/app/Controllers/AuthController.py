@@ -1,19 +1,19 @@
 from fastapi.security import OAuth2PasswordRequestForm
-from app.Core.Security import verify_password, hash_password
-from app.Core.Security import create_access_token, create_refresh_token, verify_refresh_token
+from backend.app.Core.Security import verify_password, hash_password
+from backend.app.Core.Security import create_access_token, create_refresh_token, verify_refresh_token
 from fastapi import APIRouter, Depends, HTTPException, logger, status
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 import re
 
-from app.DataBase import get_db
-from app.Core.Config import config as settings
-from app.Core.Logger import setup_logging
+from backend.app.DataBase import get_db
+from backend.app.Core.Config import config as settings
+from backend.app.Core.Logger import setup_logging
 
-from app.Model.EmployeeModel import EmployeeModel
-from app.Model.Role import RoleEnum
-from app.View.AuthSchemas import SignupRequest, ForgotPasswordRequest
+from backend.app.Model.EmployeeModel import EmployeeModel
+from backend.app.Model.Role import RoleEnum
+from backend.app.View.AuthSchemas import SignupRequest, ForgotPasswordRequest
 
 # logger = setup_logging()
 
@@ -113,8 +113,8 @@ def loginUser(
             detail="Invalid credentials"
         )
 
-    access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": user.experience, "billable_work_hours": user.billable_work_hours })
-    refresh_token = create_refresh_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": user.experience, "billable_work_hours": user.billable_work_hours })
+    access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours })
+    refresh_token = create_refresh_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours })
     print("\n\n GENERATED TOKENS:\n", access_token, "\n", refresh_token, "\n\n")
 
     logger.info(f"Successful login for user: {form_data.username}")
@@ -177,6 +177,5 @@ def refreshAccessToken(
     if not user or not user.is_active:
         raise HTTPException(status_code=401, detail="User not found")
 
-    new_access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": user.experience, "billable_work_hours": user.billable_work_hours })
-
+    new_access_token = create_access_token({"emp_id": str(user.emp_id), "role": user.role, "email": user.email, "is_active": user.is_active, "experience": int(user.experience or 0), "billable_work_hours": user.billable_work_hours })
     return {"access_token": new_access_token, "token_type": "bearer"}

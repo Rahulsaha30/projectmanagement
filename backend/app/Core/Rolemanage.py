@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
-from app.Model.Role import RoleEnum
-from app.Core.Security import get_current_user
-from app.Model.EmployeeModel import EmployeeModel
+from backend.app.Model.Role import RoleEnum
+from backend.app.Core.Security import get_current_user
+from backend.app.Model.EmployeeModel import EmployeeModel
 #  Depend FUNCTIONS FOR ROLE-BASED ACCESS CONTROL*/
 
 

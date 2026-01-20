@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
-from app.DataBase import get_db
-from app.Core.Security import get_current_user
-from app.Controllers.ManagerController import (
+from backend.app.DataBase import get_db
+from backend.app.Core.Security import get_current_user
+from backend.app.Controllers.ManagerController import (
     create_employee, list_employees, get_employee, update_employee, deactivate_employee,
     create_assignment, list_assignments, update_assignment, delete_assignment,
     EmployeeCreate, EmployeeUpdate, EmployeeResponse,
     AssignmentCreate, AssignmentUpdate, AssignmentResponse
 )
-from app.Model.EmployeeModel import EmployeeModel
+from backend.app.Model.EmployeeModel import EmployeeModel
 
 router = APIRouter(prefix="/api/manager", tags=["Manager"])
 

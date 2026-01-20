@@ -1,14 +1,14 @@
 from passlib.context import CryptContext
 from datetime import timedelta, datetime, timezone
-from app.Core.Config import config as settings
+from backend.app.Core.Config import config as settings
 from jose import JWTError, jwt
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from app.DataBase import get_db
-from app.Model.EmployeeModel import EmployeeModel
+from backend.app.DataBase import get_db
+from backend.app.Model.EmployeeModel import EmployeeModel
 import bcrypt
-from app.Utils.JwtPayload import JwtPayload
+from backend.app.Utils.JwtPayload import JwtPayload
 # import re
 
 def hash_password(password: str) -> str:

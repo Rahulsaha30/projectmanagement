@@ -1,14 +1,15 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
 from typing import List, Optional
-from app.Model.EmployeeModel import EmployeeModel
-from app.Model.AssignedProjectModel import AssignedProjectModel
-from app.Model.ProjectModel import ProjectModel
-from app.Model.Role import RoleEnum
-from app.View.EmployeeSchemas import (
+from backend.app.Model.EmployeeModel import EmployeeModel
+from backend.app.Model.AssignedProjectModel import AssignedProjectModel
+from backend.app.Model.ProjectModel import ProjectModel
+from backend.app.Model.Role import RoleEnum
+from backend.app.Core.Security import hash_password
+from backend.app.View.EmployeeSchemas import (
     EmployeeCreate, EmployeeUpdate, EmployeeResponse,
 )
-from app.View.AssignmentSchemas import (
+from backend.app.View.AssignmentSchemas import (
     AssignmentCreate, AssignmentUpdate, AssignmentResponse
 )
 from datetime import datetime
@@ -41,7 +42,6 @@ def create_employee(db: Session, employee: EmployeeCreate, current_user: Employe
     if existing:
         raise HTTPException(status_code=400, detail="Email already exists")
     
-    from app.Core.Security import hash_password
     hashed_password = hash_password(employee.password)
     
     new_emp = EmployeeModel(
