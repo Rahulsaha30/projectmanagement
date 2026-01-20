@@ -1,7 +1,3 @@
-PS C:\Users\DipanwitaSen\Desktop\gyansys-project1> git pull
-fatal: not a git repository (or any of the parent directories): .git
-PS C:\Users\DipanwitaSen\Desktop\gyansys-project1> 
-
 fastapi
 sqlalchemy
 passlib
