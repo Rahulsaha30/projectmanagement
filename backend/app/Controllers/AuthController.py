@@ -50,6 +50,14 @@ def signupUser(
             detail="Password must be at least 8 characters with letters, digits, and special characters"
         )
     
+    # Validate age
+    # if request.experience > 40 or request.experience < 0:
+    #     logger.warning(f"Signup failed: Weak password for {request.experience}")
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="Experience must be between 20 and 40 years"
+    #     )
+    
     # Check PIN for role
     # role_pins = {
     #     RoleEnum.admin: "adm789",

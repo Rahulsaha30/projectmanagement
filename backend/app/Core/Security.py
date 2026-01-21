@@ -90,13 +90,13 @@ def get_current_user(
         print(f"Error decoding token: {e}")
         raise credentials_exception
 
-    # user = db.query(EmployeeModel).filter(EmployeeModel.emp_id == emp_id).first()
+    # Query the database to ensure user exists and is active
+    user = db.query(EmployeeModel).filter(EmployeeModel.emp_id == int(emp_id)).first()
 
-    # if user is None or not user.is_active:
-    #     raise credentials_exception
+    if user is None or not user.is_active:
+        raise credentials_exception
 
-    # return payload
-    return JwtPayload(**payload) 
+    return user 
 
 
 

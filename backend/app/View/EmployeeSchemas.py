@@ -13,12 +13,23 @@ class EmployeeResponse(BaseModel):
     experience: Optional[int]
     dept: Optional[str]
     is_active: bool
+    added_by: Optional[int] = None
 
 class EmployeeCreate(BaseModel):
     emp_name: str
     email: str
     password: str
     role: RoleEnum
+    billable_work_hours: Optional[int] = 0
+    skills: Optional[str] = None
+    experience: Optional[int] = None
+    dept: Optional[str] = None
+
+class EmployeeCreateByManager(BaseModel):
+    """Schema for managers to create employees - role is automatically set to 'employee'"""
+    emp_name: str
+    email: str
+    password: str
     billable_work_hours: Optional[int] = 0
     skills: Optional[str] = None
     experience: Optional[int] = None
@@ -43,3 +54,4 @@ class EmployeeResponse(BaseModel):
     experience: Optional[int]
     dept: Optional[str]
     is_active: bool
+    added_by: Optional[int] = None

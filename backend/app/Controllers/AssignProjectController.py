@@ -54,7 +54,11 @@ def create_assignment(db: Session, assignment: AssignmentCreate, current_user: E
         assigned_at=new_assign.assigned_at,
         allotted_hours=new_assign.allotted_hours,
         emp_name=emp.emp_name,
-        project_name=proj.name
+        project_name=proj.name,
+        is_completed=new_assign.is_completed,
+        completed_at=new_assign.completed_at,
+        hours_worked=new_assign.hours_worked,
+        completion_notes=new_assign.completion_notes
     )
 
 def list_assignments(db: Session, emp_id: Optional[int] = None, project_id: Optional[int] = None, current_user: EmployeeModel = None):
@@ -76,7 +80,11 @@ def list_assignments(db: Session, emp_id: Optional[int] = None, project_id: Opti
             assigned_at=a.assigned_at,
             allotted_hours=a.allotted_hours,
             emp_name=a.employee.emp_name,
-            project_name=a.project.name
+            project_name=a.project.name,
+            is_completed=a.is_completed,
+            completed_at=a.completed_at,
+            hours_worked=a.hours_worked,
+            completion_notes=a.completion_notes
         ) for a in assignments
     ]
 
@@ -99,7 +107,11 @@ def update_assignment(db: Session, assign_id: int, update: AssignmentUpdate, cur
         assigned_at=assign.assigned_at,
         allotted_hours=assign.allotted_hours,
         emp_name=assign.employee.emp_name,
-        project_name=assign.project.name
+        project_name=assign.project.name,
+        is_completed=assign.is_completed,
+        completed_at=assign.completed_at,
+        hours_worked=assign.hours_worked,
+        completion_notes=assign.completion_notes
     )
 
 def delete_assignment(db: Session, assign_id: int, current_user: EmployeeModel):

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, ForeignKey, DateTime, UniqueConstraint
+from sqlalchemy import Column, Integer, ForeignKey, DateTime, UniqueConstraint, Boolean, String
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from backend.app.DataBase import Base
@@ -13,6 +13,12 @@ class AssignedProjectModel(Base):
 
     assigned_at = Column(DateTime, default=datetime.utcnow)
     allotted_hours = Column(Integer, nullable=False)
+    
+    # Task completion tracking
+    is_completed = Column(Boolean, default=False)
+    completed_at = Column(DateTime, nullable=True)
+    hours_worked = Column(Integer, default=0)
+    completion_notes = Column(String, nullable=True)
 
     employee = relationship("EmployeeModel", back_populates="assignments")
     project = relationship("ProjectModel", back_populates="assignments")
