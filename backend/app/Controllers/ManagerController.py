@@ -70,8 +70,6 @@ def list_employees(db: Session, dept: Optional[str] = None, role: Optional[str] 
     # Manager can only see employees in their department
     if current_user and current_user.role == RoleEnum.manager:
         query = query.filter(EmployeeModel.dept == current_user.dept)
-    elif dept:
-        query = query.filter(EmployeeModel.dept == dept)
     
     if role:
         query = query.filter(EmployeeModel.role == RoleEnum(role))
