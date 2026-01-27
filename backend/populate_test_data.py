@@ -274,7 +274,7 @@ def populate_data():
         
     except Exception as e:
         db.rollback()
-        print(f"❌ Error: {e}")
+        print(f"❌i  Error: {e}")
         import traceback
         traceback.print_exc()
     finally:
