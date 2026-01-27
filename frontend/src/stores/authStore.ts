@@ -150,7 +150,13 @@ export const useAuthStore = create<AuthState>()(
       },
 
       checkTokenExpiry: () => {
-        const { tokenExpiry, isAuthenticated } = get();
+        const { tokenExpiry, isAuthenticated, token } = get();
+        
+        // If no token exists, just mark as not loading
+        if (!token) {
+          set({ isLoading: false, isAuthenticated: false });
+          return;
+        }
         
         if (isAuthenticated && tokenExpiry) {
           if (Date.now() >= tokenExpiry) {
