@@ -99,7 +99,8 @@ def list_employees(db: Session, dept: Optional[str] = None, role: Optional[str] 
     ]
 
 def get_employee(db: Session, emp_id: int, current_user: EmployeeModel):
-    check_manager_or_admin(current_user)
+    # check_manager_or_admin(current_user)
+    check_manager(current_user)
     
     emp = db.query(EmployeeModel).filter(EmployeeModel.emp_id == emp_id).first()
     if not emp:
@@ -132,7 +133,8 @@ def get_employee(db: Session, emp_id: int, current_user: EmployeeModel):
     )
 
 def update_employee(db: Session, emp_id: int, update: EmployeeUpdate, current_user: EmployeeModel):
-    check_manager_or_admin(current_user)
+    # check_manager_or_admin(current_user)
+    check_manager(current_user)
     
     emp = db.query(EmployeeModel).filter(EmployeeModel.emp_id == emp_id).first()
     if not emp:
@@ -177,7 +179,8 @@ def update_employee(db: Session, emp_id: int, update: EmployeeUpdate, current_us
     )
 
 def toggle_employee_status(db: Session, emp_id: int, current_user: EmployeeModel):
-    check_manager_or_admin(current_user)
+    # check_manager_or_admin(current_user)
+    check_manager(current_user)
     
     emp = db.query(EmployeeModel).filter(EmployeeModel.emp_id == emp_id).first()
     if not emp:
@@ -219,7 +222,8 @@ def search_employees_by_skills(db: Session, skills: str, current_user: EmployeeM
     Returns:
         List of matching employees with their details
     """
-    check_manager_or_admin(current_user)
+    # check_manager_or_admin(current_user)
+    check_manager(current_user)
     
     # Parse skills
     skill_list = [s.strip().lower() for s in skills.split(',') if s.strip()]
