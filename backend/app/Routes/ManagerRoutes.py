@@ -30,7 +30,8 @@ def get_employees(
     db: Session = Depends(get_db),
     current_user: EmployeeModel = Depends(get_current_user)
 ):
-    return list_employees(db, None, None, current_user)
+    # return list_employees(db, current_user.dept, 'employee', current_user)
+    return list_employees(db, None, 'employee', current_user)
 
 @router.get("/employees/search/by-skills", response_model=List[EmployeeResponse])
 def search_employees_by_skill_set(

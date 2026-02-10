@@ -8,9 +8,15 @@ from backend.app.View.EmployeeSchemas import (
     EmployeeCreate, EmployeeCreateByManager, EmployeeUpdate, EmployeeResponse,
 )
 
-# def check_manager_or_admin(user: EmployeeModel):
 def check_manager_or_admin(user):
     if user.role not in [RoleEnum.manager, RoleEnum.admin]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Not enough permissions"
+        )
+
+def check_manager(user):
+    if user.role not in [RoleEnum.manager]:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not enough permissions"
@@ -22,7 +28,8 @@ def create_employee(db: Session, employee: EmployeeCreateByManager, current_user
     # print("\nCURRENT USRER ROLE\n", current_user['role'], "\n\n")
     print("\nCURRENT USRER ROLE\n", current_user.role, "\n\n")
 
-    check_manager_or_admin(current_user)
+    # check_manager_or_admin(current_user)
+    check_manager(current_user)
 
     # Managers and admins can only add employees with 'employee' role using this endpoint
     # For admins to create managers/admins, they should use a different endpoint or the role field
@@ -63,7 +70,8 @@ def create_employee(db: Session, employee: EmployeeCreateByManager, current_user
 
 def list_employees(db: Session, dept: Optional[str] = None, role: Optional[str] = None, current_user: EmployeeModel = None):
     if current_user:
-        check_manager_or_admin(current_user)
+        # check_manager_or_admin(current_user)
+        check_manager(current_user)
     
     query = db.query(EmployeeModel)
     

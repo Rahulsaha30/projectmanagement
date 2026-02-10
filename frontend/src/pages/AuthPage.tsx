@@ -35,6 +35,8 @@ const AuthPage = () => {
     const [fpPin, setFpPin] = useState('');
     const [fpNewPassword, setFpNewPassword] = useState('');
 
+    // const [authState, setAuthState] = useState("login");
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         
@@ -91,18 +93,21 @@ const AuthPage = () => {
             
             addToast({
                 type: 'success',
-                message: 'Signup successful! Logging you in...'
+                message: 'Signup successful'
             });
             
-            // Navigate based on role after signup
-            const currentRole = useAuthStore.getState().role;
-            if (currentRole === 'admin') {
-                navigate('/admin');
-            } else if (currentRole === 'manager') {
-                navigate('/manager');
-            } else {
-                navigate('/my-tasks');
-            }
+            // // Navigate based on role after signup
+            // const currentRole = useAuthStore.getState().role;
+            // if (currentRole === 'admin') {
+            //     navigate('/admin');
+            // } else if (currentRole === 'manager') {
+            //     navigate('/manager');
+            // } else {
+            //     navigate('/my-tasks');
+            // }
+
+            // navigate('/login');
+            // setActiveTab('signup');
         } catch (err: unknown) {
             addToast({
                 type: 'error',

@@ -74,22 +74,32 @@ export const useAuthStore = create<AuthState>()(
           pin
         });
         
-        const decoded = jwtDecode<DecodedToken>(data.access_token);
+        // const decoded = jwtDecode<DecodedToken>(data.access_token);
         
         // Store token in localStorage for axios interceptor
-        localStorage.setItem('token', data.access_token);
+        // localStorage.setItem('token', data.access_token);
         
         set({
-          isAuthenticated: true,
-          token: data.access_token,
-          refreshToken: localStorage.getItem('refresh_token'),
-          role: decoded.role,
-          empId: decoded.emp_id,
-          tokenExpiry: decoded.exp * 1000,
+          // isAuthenticated: true,
+
+
+
+
+          // token: String(data.access_token),
+          
+          
+          
+          
+          
+          // refreshToken: localStorage.getItem('refresh_token'),
+          // role: decoded.role,
+          // empId: decoded.emp_id,
+          empId: data.emp_id,
+          // tokenExpiry: decoded.exp * 1000,
           isLoading: false,
         });
 
-        get().scheduleTokenRefresh();
+        // get().scheduleTokenRefresh();
       },
 
       logout: () => {
