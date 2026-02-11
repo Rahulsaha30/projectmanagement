@@ -1,79 +1,91 @@
-import * as React from "react"
+import * as React from "react";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import CardActions from "@mui/material/CardActions";
+import Typography from "@mui/material/Typography";
+import type { CardProps, CardContentProps, CardHeaderProps, CardActionsProps } from "@mui/material";
 
-import { cn } from "@/lib/utils"
+const CustomCard = React.forwardRef<HTMLDivElement, CardProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Card ref={ref} {...props}>
+        {children}
+      </Card>
+    );
+  }
+);
 
-const Card = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "rounded-lg border bg-card text-card-foreground shadow-sm",
-      className
-    )}
-    {...props}
-  />
-))
-Card.displayName = "Card"
+CustomCard.displayName = "Card";
 
-const CardHeader = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex flex-col space-y-1.5 p-6", className)}
-    {...props}
-  />
-))
-CardHeader.displayName = "CardHeader"
+const CustomCardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
+  ({ title, subheader, ...props }, ref) => {
+    return (
+      <CardHeader
+        ref={ref}
+        title={title}
+        subheader={subheader}
+        {...props}
+      />
+    );
+  }
+);
 
-const CardTitle = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-))
-CardTitle.displayName = "CardTitle"
+CustomCardHeader.displayName = "CardHeader";
 
-const CardDescription = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
-    {...props}
-  />
-))
-CardDescription.displayName = "CardDescription"
+const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTMLHeadingElement>>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Typography variant="h5" component="h2" ref={ref} {...props}>
+        {children}
+      </Typography>
+    );
+  }
+);
 
-const CardContent = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div ref={ref} className={cn("p-6 pt-0", className)} {...props} />
-))
-CardContent.displayName = "CardContent"
+CardTitle.displayName = "CardTitle";
 
-const CardFooter = React.forwardRef<
-  HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement>
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn("flex items-center p-6 pt-0", className)}
-    {...props}
-  />
-))
-CardFooter.displayName = "CardFooter"
+const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttributes<HTMLParagraphElement>>(
+  ({ children, ...props }, ref) => {
+    return (
+      <Typography variant="body2" color="text.secondary" ref={ref} {...props}>
+        {children}
+      </Typography>
+    );
+  }
+);
 
-export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
+CardDescription.displayName = "CardDescription";
+
+const CustomCardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <CardContent ref={ref} {...props}>
+        {children}
+      </CardContent>
+    );
+  }
+);
+
+CustomCardContent.displayName = "CardContent";
+
+const CustomCardFooter = React.forwardRef<HTMLDivElement, CardActionsProps>(
+  ({ children, ...props }, ref) => {
+    return (
+      <CardActions ref={ref} {...props}>
+        {children}
+      </CardActions>
+    );
+  }
+);
+
+CustomCardFooter.displayName = "CardFooter";
+
+export {
+  CustomCard as Card,
+  CustomCardHeader as CardHeader,
+  CustomCardContent as CardContent,
+  CustomCardFooter as CardFooter,
+  CardTitle,
+  CardDescription,
+};

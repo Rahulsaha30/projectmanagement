@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { useAuthStore } from './stores/authStore';
 import { ToastProvider } from './context/ToastContext';
 import ToastContainer from './components/ToastContainer';
@@ -7,6 +9,7 @@ import AuthPage from './pages/AuthPage';
 import AdminPage from './pages/AdminPage';
 import ManagerPage from './pages/ManagerPage';
 import EmployeePage from './pages/EmployeePage';
+import theme from './theme';
 import type { JSX } from 'react';
 
 const ProtectedRoute = ({ children, allowedRoles }: { children: JSX.Element, allowedRoles?: string[] }) => {
@@ -60,10 +63,13 @@ function App() {
   }, [checkTokenExpiry]);
 
   return (
-    <ToastProvider>
-      <ToastContainer />
-      <AppRoutes />
-    </ToastProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <ToastProvider>
+        <ToastContainer />
+        <AppRoutes />
+      </ToastProvider>
+    </ThemeProvider>
   );
 }
 

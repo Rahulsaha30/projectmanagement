@@ -1,8 +1,14 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import { useAuthStore } from '../stores/authStore';
 import { useNavigate, Link } from 'react-router-dom';
-import { AuroraBackground } from './ui/aurora-background';
+
+// MUI Components
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, role, logout } = useAuthStore();
@@ -14,42 +20,86 @@ const Layout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <AuroraBackground className="!h-auto min-h-screen">
-      <header className="sticky top-0 z-50 w-full border-b bg-primary/80 backdrop-blur-md text-primary-foreground transition-all-smooth">
-        <div className="container mx-auto flex h-16 max-w-7xl items-center justify-between px-4 md:px-6 lg:px-8">
-          <div className="flex items-center">
-            <Link to="/" className="flex items-center space-x-2 transition-all-smooth hover:opacity-80">
-              <span className="text-lg font-bold">Project Management System</span>
-            </Link>
-          </div>
-          <div className="flex items-center">
-             {isAuthenticated && (
-                <nav className="flex items-center gap-2">
-                    {role === 'admin' && (
-                        <Button variant="ghost" asChild className="text-primary-foreground hover:bg-primary/90 hover:text-white transition-all-smooth">
-                            <Link to="/admin">Projects</Link>
-                        </Button>
-                    )}
-                    {role === 'manager' && (
-                        <Button variant="ghost" asChild className="text-primary-foreground hover:bg-primary/90 hover:text-white transition-all-smooth">
-                            <Link to="/manager">Employees</Link>
-                        </Button>
-                    )}
-                    <Button variant="ghost" asChild className="text-primary-foreground hover:bg-primary/90 hover:text-white transition-all-smooth">
-                        <Link to="/my-tasks">My Tasks</Link>
-                    </Button>
-                    <Button variant="secondary" onClick={handleLogout} className="ml-2 transition-all-smooth hover-lift">
-                        Logout
-                    </Button>
-                </nav>
-             )}
-          </div>
-        </div>
-      </header>
-      <main className="container mx-auto max-w-7xl px-4 py-8 md:px-6 lg:px-8 relative z-10">
+    <Box className="aurora-bg" sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <AppBar 
+        position="sticky" 
+        elevation={0}
+        sx={{ 
+          background: 'rgba(79, 70, 229, 0.9)',
+          backdropFilter: 'blur(10px)',
+          borderBottom: '1px solid rgba(255,255,255,0.1)'
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar disableGutters>
+            <Typography 
+              variant="h6" 
+              component={Link} 
+              to="/"
+              sx={{ 
+                flexGrow: 1, 
+                textDecoration: 'none', 
+                color: 'white',
+                fontWeight: 'bold'
+              }}
+            >
+              Project Management System
+            </Typography>
+            {isAuthenticated && (
+              <Box sx={{ display: 'flex', gap: 1 }}>
+                {role === 'admin' && (
+                  <Button 
+                    component={Link} 
+                    to="/admin"
+                    sx={{ color: 'white' }}
+                  >
+                    Projects
+                  </Button>
+                )}
+                {role === 'manager' && (
+                  <Button 
+                    component={Link} 
+                    to="/manager"
+                    sx={{ color: 'white' }}
+                  >
+                    Employees
+                  </Button>
+                )}
+                <Button 
+                  component={Link} 
+                  to="/my-tasks"
+                  sx={{ color: 'white' }}
+                >
+                  My Tasks
+                </Button>
+                <Button 
+                  variant="contained"
+                  onClick={handleLogout}
+                  sx={{ 
+                    bgcolor: 'rgba(255,255,255,0.2)',
+                    color: 'white',
+                    '&:hover': { bgcolor: 'rgba(255,255,255,0.3)' }
+                  }}
+                >
+                  Logout
+                </Button>
+              </Box>
+            )}
+          </Toolbar>
+        </Container>
+      </AppBar>
+      <Container 
+        maxWidth="xl" 
+        sx={{ 
+          flex: 1, 
+          py: 4,
+          position: 'relative',
+          zIndex: 10
+        }}
+      >
         {children}
-      </main>
-    </AuroraBackground>
+      </Container>
+    </Box>
   );
 };
 

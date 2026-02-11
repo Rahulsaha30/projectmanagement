@@ -1,6 +1,17 @@
-
 import { useToast } from '../context/ToastContext';
-import { X, CheckCircle, AlertCircle, AlertTriangle, Info } from 'lucide-react';
+
+// MUI Components
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Slide from '@mui/material/Slide';
+
+// Icons
+import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import WarningIcon from '@mui/icons-material/Warning';
+import InfoIcon from '@mui/icons-material/Info';
 
 const ToastContainer = () => {
   const { toasts, removeToast } = useToast();
@@ -8,55 +19,68 @@ const ToastContainer = () => {
   const getIcon = (type: string) => {
     switch (type) {
       case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
+        return <CheckCircleIcon fontSize="small" />;
       case 'error':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
+        return <ErrorIcon fontSize="small" />;
       case 'warning':
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />;
+        return <WarningIcon fontSize="small" />;
       case 'info':
-        return <Info className="h-5 w-5 text-blue-500" />;
+        return <InfoIcon fontSize="small" />;
       default:
-        return <Info className="h-5 w-5 text-gray-500" />;
+        return <InfoIcon fontSize="small" />;
     }
   };
 
-  const getToastStyles = (type: string) => {
+  const getSeverity = (type: string): 'success' | 'error' | 'warning' | 'info' => {
     switch (type) {
       case 'success':
-        return 'border-green-200 bg-green-50 text-green-800';
+        return 'success';
       case 'error':
-        return 'border-red-200 bg-red-50 text-red-800';
+        return 'error';
       case 'warning':
-        return 'border-yellow-200 bg-yellow-50 text-yellow-800';
+        return 'warning';
       case 'info':
-        return 'border-blue-200 bg-blue-50 text-blue-800';
+        return 'info';
       default:
-        return 'border-gray-200 bg-gray-50 text-gray-800';
+        return 'info';
     }
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50 space-y-2">
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 16,
+        right: 16,
+        zIndex: 9999,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1,
+      }}
+    >
       {toasts.map((toast) => (
-        <div
-          key={toast.id}
-          className={`flex items-center gap-3 rounded-lg border p-4 shadow-lg animate-slide-in-right transition-all-smooth ${getToastStyles(
-            toast.type
-          )}`}
-        >
-          {getIcon(toast.type)}
-          <div className="flex-1">
-            <p className="text-sm font-medium">{toast.message}</p>
-          </div>
-          <button
-            onClick={() => removeToast(toast.id)}
-            className="rounded-full p-1 hover:bg-black/10 transition-all-smooth hover:scale-110"
+        <Slide key={toast.id} direction="left" in={true} mountOnEnter unmountOnExit>
+          <Alert
+            severity={getSeverity(toast.type)}
+            icon={getIcon(toast.type)}
+            action={
+              <IconButton
+                size="small"
+                onClick={() => removeToast(toast.id)}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            }
+            sx={{
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+              minWidth: 300,
+            }}
           >
-            <X className="h-4 w-4" />
-          </button>
-        </div>
+            {toast.message}
+          </Alert>
+        </Slide>
       ))}
-    </div>
+    </Box>
   );
 };
 

@@ -2,28 +2,28 @@ import { useState, useCallback, useEffect } from 'react';
 import Layout from '../components/Layout';
 import { useAssignmentStore } from '../stores/assignmentStore';
 import { useToast } from '../context/ToastContext';
-
-import { Button } from "@/components/ui/button"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import LoadingSpinner from '../components/LoadingSpinner';
-import { RefreshCw } from 'lucide-react';
+
+// MUI Components
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Chip from '@mui/material/Chip';
+
+// Icons
+import RefreshIcon from '@mui/icons-material/Refresh';
 
 const EmployeePage = () => {
     const { addToast } = useToast();
@@ -33,7 +33,6 @@ const EmployeePage = () => {
     const [notes, setNotes] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Zustand store
     const {
         myAssignments,
         isLoading,
@@ -41,7 +40,6 @@ const EmployeePage = () => {
         completeAssignment
     } = useAssignmentStore();
 
-    // Load initial data
     useEffect(() => {
         fetchMyAssignments();
     }, [fetchMyAssignments]);
@@ -82,131 +80,117 @@ const EmployeePage = () => {
 
     return (
         <Layout>
-            <div className="animate-fade-in space-y-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <h1 className="text-3xl font-bold tracking-tight">My Tasks</h1>
+            <Box sx={{ animation: 'fadeIn 0.3s ease-in-out' }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, mb: 4 }}>
+                    <Typography variant="h4" fontWeight="bold">My Tasks</Typography>
                     <Button 
                         onClick={fetchMyAssignments} 
-                        variant="outline" 
-                        size="sm"
+                        variant="outlined"
                         disabled={isLoading}
-                        className="transition-all-smooth w-full sm:w-auto"
+                        startIcon={<RefreshIcon className={isLoading ? 'animate-spin' : ''} />}
                     >
-                        <RefreshCw className={`mr-2 h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
                         Refresh
                     </Button>
-                </div>
+                </Box>
                 
                 {isLoading && !myAssignments ? (
-                    <div className="flex items-center justify-center h-64">
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 256 }}>
                         <LoadingSpinner size="lg" />
-                    </div>
+                    </Box>
                 ) : (
-                    <div className="rounded-lg border shadow-card animate-slide-up overflow-hidden bg-card">
-                        <div className="overflow-x-auto">
-                            <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Project</TableHead>
-                                <TableHead>Assigned At</TableHead>
-                                <TableHead>Allotted Hours</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Action</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {myAssignments && myAssignments.length > 0 ? (
-                                myAssignments.map(a => (
-                                    <TableRow key={a.assign_id} className="hover-lift transition-all-smooth">
-                                        <TableCell className="font-medium">{a.project_name}</TableCell>
-                                        <TableCell>{new Date(a.assigned_at).toLocaleDateString()}</TableCell>
-                                        <TableCell>{a.allotted_hours}h</TableCell>
-                                        <TableCell>
-                                            {a.is_completed ? (
-                                                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-all-smooth border-transparent bg-green-500 text-white">
-                                                    Completed
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-all-smooth border-transparent bg-yellow-500 text-white">
-                                                    Pending
-                                                </span>
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            {!a.is_completed && (
-                                                <Button size="sm" onClick={() => handleOpenComplete(a.assign_id)} className="transition-all-smooth hover-lift">
-                                                    Complete
-                                                </Button>
-                                            )}
+                    <TableContainer component={Paper} variant="outlined" sx={{ animation: 'slideUp 0.4s ease-out' }}>
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>Project</TableCell>
+                                    <TableCell>Assigned At</TableCell>
+                                    <TableCell>Allotted Hours</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Action</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {myAssignments && myAssignments.length > 0 ? (
+                                    myAssignments.map(a => (
+                                        <TableRow key={a.assign_id} hover>
+                                            <TableCell fontWeight="medium">{a.project_name}</TableCell>
+                                            <TableCell>{new Date(a.assigned_at).toLocaleDateString()}</TableCell>
+                                            <TableCell>{a.allotted_hours}h</TableCell>
+                                            <TableCell>
+                                                <Chip 
+                                                    label={a.is_completed ? 'Completed' : 'Pending'}
+                                                    color={a.is_completed ? 'success' : 'warning'}
+                                                    size="small"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                {!a.is_completed && (
+                                                    <Button 
+                                                        size="small" 
+                                                        variant="contained"
+                                                        onClick={() => handleOpenComplete(a.assign_id)}
+                                                    >
+                                                        Complete
+                                                    </Button>
+                                                )}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={5} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                                            No assignments found
                                         </TableCell>
                                     </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
-                                        No assignments found
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-        )}
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
 
-        <Dialog open={openComplete} onOpenChange={setOpenComplete}>
-            <DialogContent className="animate-scale-in sm:max-w-lg">
-                <DialogHeader>
+                <Dialog open={openComplete} onClose={() => setOpenComplete(false)} maxWidth="sm" fullWidth>
                     <DialogTitle>Complete Task</DialogTitle>
-                    <DialogDescription>Submit your work details.</DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="hoursWorked">Hours Worked</Label>
-                            <Input 
-                                id="hoursWorked" 
-                                type="number" 
-                                min="0"
-                                value={hoursWorked} 
-                                onChange={e => setHoursWorked(Number(e.target.value))} 
+                    <DialogContent>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+                            <TextField
+                                label="Hours Worked"
+                                type="number"
+                                inputProps={{ min: 0 }}
+                                value={hoursWorked}
+                                onChange={e => setHoursWorked(Number(e.target.value))}
+                                fullWidth
                             />
-                        </div>
-                        <div className="space-y-2">
-                             <Label htmlFor="notes">Completion Notes</Label>
-                             <textarea 
-                                className="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                                id="notes" 
-                                value={notes} 
-                                onChange={e => setNotes(e.target.value)} 
-                             />
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button 
-                            variant="outline" 
-                            onClick={() => setOpenComplete(false)}
-                            disabled={isSubmitting}
-                        >
+                            <TextField
+                                label="Completion Notes"
+                                multiline
+                                rows={3}
+                                value={notes}
+                                onChange={e => setNotes(e.target.value)}
+                                fullWidth
+                            />
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpenComplete(false)} disabled={isSubmitting}>
                             Cancel
                         </Button>
                         <Button 
                             onClick={handleComplete}
+                            variant="contained"
                             disabled={isSubmitting || hoursWorked <= 0}
-                            className="transition-all-smooth"
                         >
                             {isSubmitting ? (
-                                <>
-                                    <LoadingSpinner size="sm" className="mr-2" />
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <LoadingSpinner size="sm" />
                                     Submitting...
-                                </>
+                                </Box>
                             ) : (
                                 'Submit'
                             )}
                         </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-            </div>
+                    </DialogActions>
+                </Dialog>
+            </Box>
         </Layout>
     );
 };
