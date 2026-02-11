@@ -2,36 +2,44 @@ import { useState, useEffect } from 'react';
 import Layout from '../components/Layout';
 import { useProjectStore } from '../stores/projectStore';
 import { useToast } from '../context/ToastContext';
-
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
 import LoadingSpinner from '../components/LoadingSpinner';
-import { RefreshCw, Plus, BarChart3, FolderOpen, CheckCircle2, Clock } from 'lucide-react';
+
+// MUI Components
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+
+// Icons
+import RefreshIcon from '@mui/icons-material/Refresh';
+import AddIcon from '@mui/icons-material/Add';
+import BarChartIcon from '@mui/icons-material/BarChart';
+import FolderOpenIcon from '@mui/icons-material/FolderOpen';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 const AdminPage = () => {
     const { addToast } = useToast();
     const [open, setOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     
-    // Zustand store
     const {
         projects,
         stats,
@@ -43,13 +51,11 @@ const AdminPage = () => {
         updateProjectById
     } = useProjectStore();
     
-    // New Project Form
     const [name, setName] = useState('');
     const [clientName, setClientName] = useState(''); 
     const [expectedHours, setExpectedHours] = useState('');
     const [endDate, setEndDate] = useState('');
 
-    // Load initial data
     useEffect(() => {
         fetchProjects();
         fetchStats();
@@ -83,7 +89,7 @@ const AdminPage = () => {
             setClientName('');
             setExpectedHours('');
             setEndDate('');
-            fetchStats(); // Refresh stats after creating
+            fetchStats();
         } catch (error) {
             addToast({
                 type: 'error',
@@ -101,7 +107,7 @@ const AdminPage = () => {
                 type: 'success',
                 message: `Project ${!currentStatus ? 'activated' : 'deactivated'} successfully!`
             });
-            fetchStats(); // Refresh stats after update
+            fetchStats();
         } catch (error) {
             addToast({
                 type: 'error',
@@ -112,228 +118,216 @@ const AdminPage = () => {
 
     return (
         <Layout>
-            <div className="animate-fade-in space-y-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                    <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+            <Box sx={{ animation: 'fadeIn 0.3s ease-in-out' }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: 2, mb: 4 }}>
+                    <Typography variant="h4" fontWeight="bold">Admin Dashboard</Typography>
                     <Button 
                         onClick={() => {
                             fetchProjects();
                             fetchStats();
                         }} 
-                        variant="outline" 
-                        size="sm"
+                        variant="outlined"
                         disabled={isLoadingProjects || isLoadingStats}
-                        className="transition-all-smooth w-full sm:w-auto"
+                        startIcon={<RefreshIcon className={isLoadingProjects || isLoadingStats ? 'animate-spin' : ''} />}
                     >
-                        <RefreshCw className={`mr-2 h-4 w-4 ${(isLoadingProjects || isLoadingStats) ? 'animate-spin' : ''}`} />
                         Refresh
                     </Button>
-                </div>
+                </Box>
                 
                 {/* Stats Cards */}
-                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 animate-slide-up">
-                {isLoadingStats ? (
-                    Array.from({ length: 4 }).map((_, i) => (
-                        <Card key={i} className="hover-lift transition-all-smooth">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Loading...</CardTitle>
-                            </CardHeader>
-                            <CardContent>
-                                <LoadingSpinner size="sm" />
-                            </CardContent>
-                        </Card>
-                    ))
-                ) : stats ? (
-                    <>
-                        <Card className="card-pulse hover-lift transition-all-smooth">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
-                                <FolderOpen className="h-4 w-4 text-muted-foreground" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">{stats.total_projects}</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="card-pulse hover-lift transition-all-smooth">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
-                                <Clock className="h-4 w-4 text-muted-foreground" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">{stats.active_projects}</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="card-pulse hover-lift transition-all-smooth">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Completed</CardTitle>
-                                <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">{stats.completed_projects}</div>
-                            </CardContent>
-                        </Card>
-                        <Card className="card-pulse hover-lift transition-all-smooth">
-                            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                <CardTitle className="text-sm font-medium">Total Hours</CardTitle>
-                                <BarChart3 className="h-4 w-4 text-muted-foreground" />
-                            </CardHeader>
-                            <CardContent>
-                                <div className="text-2xl font-bold">{stats.total_expected_hours}h</div>
-                            </CardContent>
-                        </Card>
-                    </>
-                ) : null}
-            </div>
+                <Grid container spacing={3} sx={{ mb: 4, animation: 'slideUp 0.4s ease-out' }}>
+                    {isLoadingStats ? (
+                        Array.from({ length: 4 }).map((_, i) => (
+                            <Grid item xs={12} sm={6} lg={3} key={i}>
+                                <Card>
+                                    <CardHeader title="Loading..." />
+                                    <CardContent><LoadingSpinner size="sm" /></CardContent>
+                                </Card>
+                            </Grid>
+                        ))
+                    ) : stats ? (
+                        <>
+                            <Grid item xs={12} sm={6} lg={3}>
+                                <Card className="hover-lift">
+                                    <CardHeader 
+                                        title="Total Projects"
+                                        avatar={<FolderOpenIcon color="action" />}
+                                        titleTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                    />
+                                    <CardContent>
+                                        <Typography variant="h4" fontWeight="bold">{stats.total_projects}</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={6} lg={3}>
+                                <Card className="hover-lift">
+                                    <CardHeader 
+                                        title="Active Projects"
+                                        avatar={<AccessTimeIcon color="action" />}
+                                        titleTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                    />
+                                    <CardContent>
+                                        <Typography variant="h4" fontWeight="bold">{stats.active_projects}</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={6} lg={3}>
+                                <Card className="hover-lift">
+                                    <CardHeader 
+                                        title="Completed"
+                                        avatar={<CheckCircleIcon color="action" />}
+                                        titleTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                    />
+                                    <CardContent>
+                                        <Typography variant="h4" fontWeight="bold">{stats.completed_projects}</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item xs={12} sm={6} lg={3}>
+                                <Card className="hover-lift">
+                                    <CardHeader 
+                                        title="Total Hours"
+                                        avatar={<BarChartIcon color="action" />}
+                                        titleTypographyProps={{ variant: 'body2', color: 'text.secondary' }}
+                                    />
+                                    <CardContent>
+                                        <Typography variant="h4" fontWeight="bold">{stats.total_expected_hours}h</Typography>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        </>
+                    ) : null}
+                </Grid>
 
-            {/* Projects Table */}
-            <div className="space-y-4">
-                <div className="flex justify-end">
-                    <Button onClick={() => setOpen(true)} className="transition-all-smooth hover-lift w-full sm:w-auto">
-                        <Plus className="mr-2 h-4 w-4" />
+                {/* Projects Table */}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+                    <Button 
+                        onClick={() => setOpen(true)} 
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                    >
                         Create Project
                     </Button>
-                </div>
+                </Box>
 
                 {isLoadingProjects && !projects ? (
-                    <div className="flex items-center justify-center h-64">
+                    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 256 }}>
                         <LoadingSpinner size="lg" />
-                    </div>
+                    </Box>
                 ) : (
-                    <div className="rounded-lg border shadow-card overflow-hidden bg-card">
-                        <div className="overflow-x-auto">
-                            <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>ID</TableHead>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Client</TableHead>
-                                <TableHead>Expected Hours</TableHead>
-                                <TableHead>Start Date</TableHead>
-                                <TableHead>End Date</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Actions</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {projects && projects.length > 0 ? (
-                                projects.map(p => (
-                                    <TableRow key={p.project_id} className="hover-lift transition-all-smooth">
-                                        <TableCell className="font-medium">{p.project_id}</TableCell>
-                                        <TableCell className="font-medium">{p.name}</TableCell>
-                                        <TableCell>{p.client}</TableCell>
-                                        <TableCell>{p.expected_hours || 0}h</TableCell>
-                                        <TableCell>{new Date(p.start_date).toLocaleDateString()}</TableCell>
-                                        <TableCell>{p.end_date ? new Date(p.end_date).toLocaleDateString() : '-'}</TableCell>
-                                        <TableCell>
-                                            {p.status ? (
-                                                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-green-500 text-white transition-all-smooth">
-                                                    Active
-                                                </span>
-                                            ) : (
-                                                <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold border-transparent bg-gray-500 text-white transition-all-smooth">
-                                                    Inactive
-                                                </span>
-                                            )}
-                                        </TableCell>
-                                        <TableCell>
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => handleToggleStatus(p.project_id, p.status)}
-                                                className="transition-all-smooth"
-                                            >
-                                                {p.status ? 'Deactivate' : 'Activate'}
-                                            </Button>
+                    <TableContainer component={Paper} variant="outlined">
+                        <Table>
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell>ID</TableCell>
+                                    <TableCell>Name</TableCell>
+                                    <TableCell>Client</TableCell>
+                                    <TableCell>Expected Hours</TableCell>
+                                    <TableCell>Start Date</TableCell>
+                                    <TableCell>End Date</TableCell>
+                                    <TableCell>Status</TableCell>
+                                    <TableCell>Actions</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {projects && projects.length > 0 ? (
+                                    projects.map(p => (
+                                        <TableRow key={p.project_id} hover>
+                                            <TableCell>{p.project_id}</TableCell>
+                                            <TableCell fontWeight="medium">{p.name}</TableCell>
+                                            <TableCell>{p.client}</TableCell>
+                                            <TableCell>{p.expected_hours || 0}h</TableCell>
+                                            <TableCell>{new Date(p.start_date).toLocaleDateString()}</TableCell>
+                                            <TableCell>{p.end_date ? new Date(p.end_date).toLocaleDateString() : '-'}</TableCell>
+                                            <TableCell>
+                                                <Chip 
+                                                    label={p.status ? 'Active' : 'Inactive'}
+                                                    color={p.status ? 'success' : 'default'}
+                                                    size="small"
+                                                />
+                                            </TableCell>
+                                            <TableCell>
+                                                <Button
+                                                    variant="outlined"
+                                                    size="small"
+                                                    onClick={() => handleToggleStatus(p.project_id, p.status)}
+                                                >
+                                                    {p.status ? 'Deactivate' : 'Activate'}
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell colSpan={8} align="center" sx={{ py: 4, color: 'text.secondary' }}>
+                                            No projects found
                                         </TableCell>
                                     </TableRow>
-                                ))
-                            ) : (
-                                <TableRow>
-                                    <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
-                                        No projects found
-                                    </TableCell>
-                                </TableRow>
-                            )}
-                        </TableBody>
-                    </Table>
-                </div>
-            </div>
-        )}
-    </div>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
 
-    {/* Create Project Dialog */}
-    <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md animate-scale-in sm:max-w-lg">
-            <DialogHeader>
-                <DialogTitle>Create New Project</DialogTitle>
-                <DialogDescription>Add a new project to the system.</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Project Name *</Label>
-                            <Input 
-                                id="name" 
-                                value={name} 
+                {/* Create Project Dialog */}
+                <Dialog open={open} onClose={() => setOpen(false)} maxWidth="sm" fullWidth>
+                    <DialogTitle>Create New Project</DialogTitle>
+                    <DialogContent>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, pt: 1 }}>
+                            <TextField
+                                label="Project Name *"
+                                value={name}
                                 onChange={e => setName(e.target.value)}
                                 placeholder="Website Redesign"
+                                fullWidth
                             />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="client">Client Name *</Label>
-                            <Input 
-                                id="client" 
-                                value={clientName} 
+                            <TextField
+                                label="Client Name *"
+                                value={clientName}
                                 onChange={e => setClientName(e.target.value)}
                                 placeholder="Acme Corp"
+                                fullWidth
                             />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="hours">Expected Hours</Label>
-                            <Input 
-                                id="hours" 
+                            <TextField
+                                label="Expected Hours"
                                 type="number"
-                                min="0"
-                                value={expectedHours} 
+                                inputProps={{ min: 0 }}
+                                value={expectedHours}
                                 onChange={e => setExpectedHours(e.target.value)}
                                 placeholder="160"
+                                fullWidth
                             />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="endDate">End Date</Label>
-                            <Input 
-                                id="endDate" 
+                            <TextField
+                                label="End Date"
                                 type="date"
-                                value={endDate} 
+                                value={endDate}
                                 onChange={e => setEndDate(e.target.value)}
+                                InputLabelProps={{ shrink: true }}
+                                fullWidth
                             />
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button 
-                            variant="outline" 
-                            onClick={() => setOpen(false)}
-                            disabled={isSubmitting}
-                        >
+                        </Box>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button onClick={() => setOpen(false)} disabled={isSubmitting}>
                             Cancel
                         </Button>
                         <Button 
                             onClick={handleCreateProject}
+                            variant="contained"
                             disabled={isSubmitting}
-                            className="transition-all-smooth"
                         >
                             {isSubmitting ? (
-                                <>
-                                    <LoadingSpinner size="sm" className="mr-2" />
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                    <LoadingSpinner size="sm" />
                                     Creating...
-                                </>
+                                </Box>
                             ) : (
                                 'Create Project'
                             )}
                         </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-            </div>
+                    </DialogActions>
+                </Dialog>
+            </Box>
         </Layout>
     );
 };
